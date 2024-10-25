@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Campo para o nome do personagem -->
+    <EditText
+        android:id="@+id/et_nome_personagem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nome do Personagem"
+        android:inputType="textPersonName" />
+
+    <!-- Dropdown para escolher a raça -->
+    <Spinner
+        android:id="@+id/spinner_raca"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/racas_array" />
+
+    <!-- Mostra os pontos de vida -->
+    <TextView
+        android:id="@+id/tv_pontos_vida"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pontos de Vida: 0"
+        android:textSize="18sp"
+        android:paddingTop="16dp" />
+
+    <!-- Seção para distribuir pontos de atributos -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Distribuição de Pontos:"
+        android:textSize="20sp"
+        android:paddingTop="16dp" />
+
+    <!-- Força -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Força" />
+    <SeekBar
+        android:id="@+id/seekBar_forca"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="15" />
+    <TextView
+        android:id="@+id/tv_forca_valor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Força: 8"
+        android:paddingBottom="8dp" />
+
+    <!-- Destreza -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Destreza" />
+    <SeekBar
+        android:id="@+id/seekBar_destreza"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="15" />
+    <TextView
+        android:id="@+id/tv_destreza_valor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Destreza: 8"
+        android:paddingBottom="8dp" />
+
+    <!-- Inteligência -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Inteligência" />
+    <SeekBar
+        android:id="@+id/seekBar_inteligencia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="15" />
+    <TextView
+        android:id="@+id/tv_inteligencia_valor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Inteligência: 8"
+        android:paddingBottom="8dp" />
+
+    <!-- Constituição -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Constituição" />
+    <SeekBar
+        android:id="@+id/seekBar_constituicao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="15" />
+    <TextView
+        android:id="@+id/tv_constituicao_valor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Constituição: 8"
+        android:paddingBottom="8dp" />
+
+    <!-- Carisma -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Carisma" />
+    <SeekBar
+        android:id="@+id/seekBar_carisma"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="15" />
+    <TextView
+        android:id="@+id/tv_carisma_valor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Carisma: 8"
+        android:paddingBottom="8dp" />
+
+    <!-- Sabedoria -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sabedoria" />
+
+    <!-- Botão para confirmar a distribuição dos pontos -->
+    <SeekBar
+        android:id="@+id/seekBar_sabedoria"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="15" />
+
+    <TextView
+        android:id="@+id/tv_sabedoria_valor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+        android:text="Sabedoria: 8" />
+
+    <Button
+        android:id="@+id/btn_confirmar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingTop="16dp"
+        android:text="Confirmar" />
+
+</LinearLayout>

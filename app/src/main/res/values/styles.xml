@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Defina o tema principal do aplicativo -->
+    <style name="Theme.Celularded4" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Adicione personalizações de tema aqui, se necessário -->
+    </style>
+</resources>

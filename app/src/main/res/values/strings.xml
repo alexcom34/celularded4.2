@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">celularded4</string>
+    <string-array name="racas_array">
+        <item>Draconato</item>
+        <item>Elfo</item>
+        <item>Humano</item>
+        <item>Orc</item>
+        <item>Anão</item>
+    </string-array>
+</resources>

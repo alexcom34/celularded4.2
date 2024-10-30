@@ -1,5 +1,8 @@
 package com.example.celularded4
 
+import CalculadorPontosVida
+import DistribuidorPontos
+import ListaRaca.Raca
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -15,7 +18,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnConfirmar: Button
     private lateinit var tvPontosVida: TextView
 
-    // Adicione SeekBars e TextViews para os atributos
     private lateinit var seekBarForca: SeekBar
     private lateinit var tvForcaValor: TextView
     private lateinit var seekBarDestreza: SeekBar
@@ -28,6 +30,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvCarismaValor: TextView
     private lateinit var seekBarSabedoria: SeekBar
     private lateinit var tvSabedoriaValor: TextView
+
+    // Instâncias das classes
+    private lateinit var distribuidor: DistribuidorPontos
+    private lateinit var personagem: Personagem
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +64,9 @@ class MainActivity : AppCompatActivity() {
         seekBarSabedoria = findViewById(R.id.seekBar_sabedoria)
         tvSabedoriaValor = findViewById(R.id.tv_sabedoria_valor)
 
+        // Instanciando DistribuidorPontos
+        distribuidor = DistribuidorPontos()
+
         // Lógica para atualizar o valor dos atributos conforme o SeekBar é movido
         seekBarForca.setOnSeekBarChangeListener(createSeekBarChangeListener(tvForcaValor))
         seekBarDestreza.setOnSeekBarChangeListener(createSeekBarChangeListener(tvDestrezaValor))
@@ -68,7 +77,43 @@ class MainActivity : AppCompatActivity() {
 
         // Configurando o botão para confirmar a distribuição
         btnConfirmar.setOnClickListener {
-            // Lógica para o que acontece quando o botão é clicado
+            // Capturando os pontos distribuídos
+            val forca = seekBarForca.progress + 8
+            val destreza = seekBarDestreza.progress + 8
+            val inteligencia = seekBarInteligencia.progress + 8
+            val constituicao = seekBarConstituicao.progress + 8
+            val carisma = seekBarCarisma.progress + 8
+            val sabedoria = seekBarSabedoria.progress + 8
+
+            // Capturando o nome e a raça selecionada
+            val nomePersonagem = nomeEditText.text.toString()
+            val racaSelecionada = spinnerRaca.selectedItem as Raca // Certifique-se de que o Spinner tenha Raca como item
+
+            // Distribuindo os pontos
+            distribuidor.adicionarPontos("forca", forca - distribuidor.forca)
+            distribuidor.adicionarPontos("destreza", destreza - distribuidor.destreza)
+            distribuidor.adicionarPontos("inteligencia", inteligencia - distribuidor.inteligencia)
+            distribuidor.adicionarPontos("constituicao", constituicao - distribuidor.constituicao)
+            distribuidor.adicionarPontos("carisma", carisma - distribuidor.carisma)
+            distribuidor.adicionarPontos("sabedoria", sabedoria - distribuidor.sabedoria)
+
+            // Criando personagem
+            personagem = Personagem(
+                nome = nomePersonagem,
+                raca = racaSelecionada,
+                forcaInicial = distribuidor.forca,
+                destrezaInicial = distribuidor.destreza,
+                inteligenciaInicial = distribuidor.inteligencia,
+                constituicaoInicial = distribuidor.constituicao,
+                carismaInicial = distribuidor.carisma,
+                sabedoriaInicial = distribuidor.sabedoria
+            )
+
+            // Calculando pontos de vida
+            val pontosVida = personagem.pontosDeVida
+
+            // Atualizando a interface do usuário
+            tvPontosVida.text = "Pontos de Vida: $pontosVida"
         }
     }
 

@@ -1,154 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Campo para o nome do personagem -->
     <EditText
         android:id="@+id/et_nome_personagem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Nome do Personagem"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:padding="8dp" />
 
-    <!-- Dropdown para escolher a raça -->
     <Spinner
         android:id="@+id/spinner_raca"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:entries="@array/racas_array" />
+        android:entries="@array/racas_array"
+        android:minHeight="48dp"
+        android:padding="8dp"/>
 
-    <!-- Mostra os pontos de vida -->
     <TextView
         android:id="@+id/tv_pontos_vida"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="16dp"
         android:text="Pontos de Vida: 0"
-        android:textSize="18sp"
-        android:paddingTop="16dp" />
+        android:textSize="18sp" />
 
-    <!-- Seção para distribuir pontos de atributos -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingTop="16dp"
         android:text="Distribuição de Pontos:"
-        android:textSize="20sp"
-        android:paddingTop="16dp" />
+        android:textSize="20sp" />
 
-    <!-- Força -->
+    <!-- Atributos com campos de entrada -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Força" />
-    <SeekBar
-        android:id="@+id/seekBar_forca"
+    <EditText
+        android:id="@+id/et_forca"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:max="15" />
-    <TextView
-        android:id="@+id/tv_forca_valor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Força: 8"
-        android:paddingBottom="8dp" />
+        android:hint="Digite o valor da Força"
+        android:inputType="number"
+        android:minHeight="48dp"
+        android:padding="8dp" />
 
-    <!-- Destreza -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Destreza" />
-    <SeekBar
-        android:id="@+id/seekBar_destreza"
+    <EditText
+        android:id="@+id/et_destreza"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:max="15" />
-    <TextView
-        android:id="@+id/tv_destreza_valor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Destreza: 8"
-        android:paddingBottom="8dp" />
+        android:hint="Digite o valor da Destreza"
+        android:inputType="number"
+        android:minHeight="48dp"
+        android:padding="8dp" />
 
-    <!-- Inteligência -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Inteligência" />
-    <SeekBar
-        android:id="@+id/seekBar_inteligencia"
+    <EditText
+        android:id="@+id/et_inteligencia"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:max="15" />
-    <TextView
-        android:id="@+id/tv_inteligencia_valor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Inteligência: 8"
-        android:paddingBottom="8dp" />
+        android:hint="Digite o valor da Inteligência"
+        android:inputType="number"
+        android:minHeight="48dp"
+        android:padding="8dp" />
 
-    <!-- Constituição -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Constituição" />
-    <SeekBar
-        android:id="@+id/seekBar_constituicao"
+    <EditText
+        android:id="@+id/et_constituicao"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:max="15" />
-    <TextView
-        android:id="@+id/tv_constituicao_valor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Constituição: 8"
-        android:paddingBottom="8dp" />
+        android:hint="Digite o valor da Constituição"
+        android:inputType="number"
+        android:minHeight="48dp"
+        android:padding="8dp" />
 
-    <!-- Carisma -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Carisma" />
-    <SeekBar
-        android:id="@+id/seekBar_carisma"
+    <EditText
+        android:id="@+id/et_carisma"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:max="15" />
-    <TextView
-        android:id="@+id/tv_carisma_valor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Carisma: 8"
-        android:paddingBottom="8dp" />
+        android:hint="Digite o valor do Carisma"
+        android:inputType="number"
+        android:minHeight="48dp"
+        android:padding="8dp" />
 
-    <!-- Sabedoria -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sabedoria" />
-
-    <!-- Botão para confirmar a distribuição dos pontos -->
-    <SeekBar
-        android:id="@+id/seekBar_sabedoria"
+    <EditText
+        android:id="@+id/et_sabedoria"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:max="15" />
+        android:hint="Digite o valor da Sabedoria"
+        android:inputType="number"
+        android:minHeight="48dp"
+        android:padding="8dp" />
 
+    <!-- Pontos restantes -->
     <TextView
-        android:id="@+id/tv_sabedoria_valor"
+        android:id="@+id/tv_pontos_restantes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="8dp"
-        android:text="Sabedoria: 8" />
+        android:text="Pontos Restantes: 27"
+        android:paddingTop="16dp"
+        android:textSize="16sp" />
+
+    <!-- Botão para redefinir pontos -->
+    <Button
+        android:id="@+id/btn_resetar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Redefinir Pontos"
+        android:layout_marginTop="8dp"
+        android:padding="8dp" />
+
+    <!-- Botão para confirmar a criação do personagem -->
 
     <Button
         android:id="@+id/btn_confirmar"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:paddingTop="16dp"
-        android:text="Confirmar" />
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:minHeight="56dp"
+        android:text="Confirmar"
+        android:padding="16dp" />
 
+
+
+    <TextView
+        android:id="@+id/tv_atributos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Atributos do Personagem"
+        android:layout_marginTop="16dp"
+        android:textSize="18sp" />
 </LinearLayout>

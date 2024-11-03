@@ -1,130 +1,133 @@
 package com.example.celularded4
 
-import CalculadorPontosVida
 import DistribuidorPontos
-import ListaRaca.Raca
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.SeekBar
-import android.widget.Spinner
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import ListaRaca.*
+import Personagem
+
+
+
+
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var nomeEditText: EditText
+    private lateinit var etNomePersonagem: EditText
     private lateinit var spinnerRaca: Spinner
-    private lateinit var btnConfirmar: Button
     private lateinit var tvPontosVida: TextView
-
-    private lateinit var seekBarForca: SeekBar
-    private lateinit var tvForcaValor: TextView
-    private lateinit var seekBarDestreza: SeekBar
-    private lateinit var tvDestrezaValor: TextView
-    private lateinit var seekBarInteligencia: SeekBar
-    private lateinit var tvInteligenciaValor: TextView
-    private lateinit var seekBarConstituicao: SeekBar
-    private lateinit var tvConstituicaoValor: TextView
-    private lateinit var seekBarCarisma: SeekBar
-    private lateinit var tvCarismaValor: TextView
-    private lateinit var seekBarSabedoria: SeekBar
-    private lateinit var tvSabedoriaValor: TextView
-
-    // Instâncias das classes
-    private lateinit var distribuidor: DistribuidorPontos
+    private lateinit var btnConfirmar: Button
+    private lateinit var btnResetar: Button
+    private lateinit var tvAtributos: TextView
+    private lateinit var tvPontosRestantes: TextView // Exibe os pontos restantes
+    private lateinit var etForca: EditText
+    private lateinit var etDestreza: EditText
+    private lateinit var etInteligencia: EditText
+    private lateinit var etConstituicao: EditText
+    private lateinit var etCarisma: EditText
+    private lateinit var etSabedoria: EditText
+    private lateinit var distribuidorPontos: DistribuidorPontos
     private lateinit var personagem: Personagem
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Inicializando as views
-        nomeEditText = findViewById(R.id.et_nome_personagem)
+        // Inicializando os componentes da interface
+        etNomePersonagem = findViewById(R.id.et_nome_personagem)
         spinnerRaca = findViewById(R.id.spinner_raca)
-        btnConfirmar = findViewById(R.id.btn_confirmar)
         tvPontosVida = findViewById(R.id.tv_pontos_vida)
+        btnConfirmar = findViewById(R.id.btn_confirmar)
+        btnResetar = findViewById(R.id.btn_resetar) // Botão para resetar pontos
+        tvAtributos = findViewById(R.id.tv_atributos)
+        tvPontosRestantes = findViewById(R.id.tv_pontos_restantes) // Pontos restantes
 
-        // Inicializando SeekBars e TextViews
-        seekBarForca = findViewById(R.id.seekBar_forca)
-        tvForcaValor = findViewById(R.id.tv_forca_valor)
+        etForca = findViewById(R.id.et_forca)
+        etDestreza = findViewById(R.id.et_destreza)
+        etInteligencia = findViewById(R.id.et_inteligencia)
+        etConstituicao = findViewById(R.id.et_constituicao)
+        etCarisma = findViewById(R.id.et_carisma)
+        etSabedoria = findViewById(R.id.et_sabedoria)
 
-        seekBarDestreza = findViewById(R.id.seekBar_destreza)
-        tvDestrezaValor = findViewById(R.id.tv_destreza_valor)
+        // Inicializando o distribuidor de pontos e exibindo os pontos restantes
+        distribuidorPontos = DistribuidorPontos()
+        tvPontosRestantes.text = "Pontos Restantes: ${distribuidorPontos.pontosRestantes()}"
 
-        seekBarInteligencia = findViewById(R.id.seekBar_inteligencia)
-        tvInteligenciaValor = findViewById(R.id.tv_inteligencia_valor)
+        // Configurando o Spinner com as raças
+        setupRacasSpinner()
 
-        seekBarConstituicao = findViewById(R.id.seekBar_constituicao)
-        tvConstituicaoValor = findViewById(R.id.tv_constituicao_valor)
+        // Configurando botões de ação
+        btnConfirmar.setOnClickListener { onConfirmarClicked() }
+        btnResetar.setOnClickListener { onResetarClicked() }
+    }
 
-        seekBarCarisma = findViewById(R.id.seekBar_carisma)
-        tvCarismaValor = findViewById(R.id.tv_carisma_valor)
+    private fun setupRacasSpinner() {
+        val racas = arrayOf("Draconato", "Elfo", "Humano", "Orc", "Anao")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, racas)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerRaca.adapter = adapter
+    }
 
-        seekBarSabedoria = findViewById(R.id.seekBar_sabedoria)
-        tvSabedoriaValor = findViewById(R.id.tv_sabedoria_valor)
+    private fun onConfirmarClicked() {
+        val nome = etNomePersonagem.text.toString()
+        val racaSelecionada = spinnerRaca.selectedItem.toString()
 
-        // Instanciando DistribuidorPontos
-        distribuidor = DistribuidorPontos()
+        val raca: Raca? = when (racaSelecionada) {
+            "Draconato" -> Draconato()
+            "Elfo" -> Elfo()
+            "Humano" -> Humano()
+            "Orc" -> Orc()
+            "Anao" -> Anao()
+            else -> null
+        }
 
-        // Lógica para atualizar o valor dos atributos conforme o SeekBar é movido
-        seekBarForca.setOnSeekBarChangeListener(createSeekBarChangeListener(tvForcaValor))
-        seekBarDestreza.setOnSeekBarChangeListener(createSeekBarChangeListener(tvDestrezaValor))
-        seekBarInteligencia.setOnSeekBarChangeListener(createSeekBarChangeListener(tvInteligenciaValor))
-        seekBarConstituicao.setOnSeekBarChangeListener(createSeekBarChangeListener(tvConstituicaoValor))
-        seekBarCarisma.setOnSeekBarChangeListener(createSeekBarChangeListener(tvCarismaValor))
-        seekBarSabedoria.setOnSeekBarChangeListener(createSeekBarChangeListener(tvSabedoriaValor))
+        if (raca != null && nome.isNotBlank()) {
+            // Inicializando o distribuidor de pontos
+            distribuidorPontos.resetarPontos()  // Garantir que o distribuidor está resetado
+            try {
+                // Adicionando pontos com o distribuidor
+                distribuidorPontos.adicionarPontos("forca", etForca.text.toString().toIntOrNull() ?: 0)
+                distribuidorPontos.adicionarPontos("destreza", etDestreza.text.toString().toIntOrNull() ?: 0)
+                distribuidorPontos.adicionarPontos("inteligencia", etInteligencia.text.toString().toIntOrNull() ?: 0)
+                distribuidorPontos.adicionarPontos("constituicao", etConstituicao.text.toString().toIntOrNull() ?: 0)
+                distribuidorPontos.adicionarPontos("carisma", etCarisma.text.toString().toIntOrNull() ?: 0)
+                distribuidorPontos.adicionarPontos("sabedoria", etSabedoria.text.toString().toIntOrNull() ?: 0)
 
-        // Configurando o botão para confirmar a distribuição
-        btnConfirmar.setOnClickListener {
-            // Capturando os pontos distribuídos
-            val forca = seekBarForca.progress + 8
-            val destreza = seekBarDestreza.progress + 8
-            val inteligencia = seekBarInteligencia.progress + 8
-            val constituicao = seekBarConstituicao.progress + 8
-            val carisma = seekBarCarisma.progress + 8
-            val sabedoria = seekBarSabedoria.progress + 8
+                // Criar o personagem com os pontos distribuídos
+                personagem = Personagem(nome, raca)
 
-            // Capturando o nome e a raça selecionada
-            val nomePersonagem = nomeEditText.text.toString()
-            val racaSelecionada = spinnerRaca.selectedItem as Raca // Certifique-se de que o Spinner tenha Raca como item
+                // Atualiza os pontos de vida após a distribuição de pontos
+                personagem.atualizarPontosDeVida()
 
-            // Distribuindo os pontos
-            distribuidor.adicionarPontos("forca", forca - distribuidor.forca)
-            distribuidor.adicionarPontos("destreza", destreza - distribuidor.destreza)
-            distribuidor.adicionarPontos("inteligencia", inteligencia - distribuidor.inteligencia)
-            distribuidor.adicionarPontos("constituicao", constituicao - distribuidor.constituicao)
-            distribuidor.adicionarPontos("carisma", carisma - distribuidor.carisma)
-            distribuidor.adicionarPontos("sabedoria", sabedoria - distribuidor.sabedoria)
-
-            // Criando personagem
-            personagem = Personagem(
-                nome = nomePersonagem,
-                raca = racaSelecionada,
-                forcaInicial = distribuidor.forca,
-                destrezaInicial = distribuidor.destreza,
-                inteligenciaInicial = distribuidor.inteligencia,
-                constituicaoInicial = distribuidor.constituicao,
-                carismaInicial = distribuidor.carisma,
-                sabedoriaInicial = distribuidor.sabedoria
-            )
-
-            // Calculando pontos de vida
-            val pontosVida = personagem.pontosDeVida
-
-            // Atualizando a interface do usuário
-            tvPontosVida.text = "Pontos de Vida: $pontosVida"
+                // Atualiza a UI com os atributos e pontos de vida
+                tvPontosVida.text = "Pontos de Vida: ${personagem.pontosDeVida}"
+                tvAtributos.text = "Atributos do Personagem:\n${personagem.exibirAtributos()}"
+                tvPontosRestantes.text = "Pontos Restantes: ${distribuidorPontos.pontosRestantes()}" // Atualizar pontos restantes
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(this, "Erro ao processar os pontos: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+        } else {
+            tvAtributos.text = "Por favor, preencha todos os campos."
         }
     }
 
-    private fun createSeekBarChangeListener(tv: TextView): SeekBar.OnSeekBarChangeListener {
-        return object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                tv.text = "${tv.text.split(":")[0]}: ${progress + 8}" // +8 para incluir a base
-            }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        }
+
+
+    private fun onResetarClicked() {
+        distribuidorPontos.resetarPontos()
+        tvPontosRestantes.text = "Pontos Restantes: ${distribuidorPontos.pontosRestantes()}"
+
+        // Reseta os campos dos atributos na UI
+        etForca.setText("")
+        etDestreza.setText("")
+        etInteligencia.setText("")
+        etConstituicao.setText("")
+        etCarisma.setText("")
+        etSabedoria.setText("")
+
+        // Feedback visual para o reset
+        tvAtributos.text = "Distribuição de pontos redefinida."
     }
 }

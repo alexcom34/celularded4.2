@@ -6,7 +6,7 @@ class Anao : Raca {
     override val nome = "Anao"
 
     override fun aplicarBonus(personagem: Personagem) {
-        personagem.constituicao += 2
-        personagem.sabedoria += 1
+        personagem.pontosDistribuidosConstituicao += 2
+        personagem.pontosDistribuidosSabedoria += 1
     }
 }

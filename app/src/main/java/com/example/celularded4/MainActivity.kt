@@ -6,9 +6,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import ListaRaca.*
 import Personagem
-
-
-
+import android.content.Intent
 
 
 class MainActivity : AppCompatActivity() {
@@ -82,27 +80,38 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (raca != null && nome.isNotBlank()) {
-            // Inicializando o distribuidor de pontos
             distribuidorPontos.resetarPontos()  // Garantir que o distribuidor está resetado
             try {
-                // Adicionando pontos com o distribuidor
-                distribuidorPontos.adicionarPontos("forca", etForca.text.toString().toIntOrNull() ?: 0)
-                distribuidorPontos.adicionarPontos("destreza", etDestreza.text.toString().toIntOrNull() ?: 0)
-                distribuidorPontos.adicionarPontos("inteligencia", etInteligencia.text.toString().toIntOrNull() ?: 0)
-                distribuidorPontos.adicionarPontos("constituicao", etConstituicao.text.toString().toIntOrNull() ?: 0)
-                distribuidorPontos.adicionarPontos("carisma", etCarisma.text.toString().toIntOrNull() ?: 0)
-                distribuidorPontos.adicionarPontos("sabedoria", etSabedoria.text.toString().toIntOrNull() ?: 0)
+                // Adicionando pontos com o distribuidor a partir dos valores digitados
+                val sucessoForca = distribuidorPontos.adicionarPontos("forca", etForca.text.toString().toIntOrNull() ?: 0)
+                val sucessoDestreza = distribuidorPontos.adicionarPontos("destreza", etDestreza.text.toString().toIntOrNull() ?: 0)
+                val sucessoInteligencia = distribuidorPontos.adicionarPontos("inteligencia", etInteligencia.text.toString().toIntOrNull() ?: 0)
+                val sucessoConstituicao = distribuidorPontos.adicionarPontos("constituicao", etConstituicao.text.toString().toIntOrNull() ?: 0)
+                val sucessoCarisma = distribuidorPontos.adicionarPontos("carisma", etCarisma.text.toString().toIntOrNull() ?: 0)
+                val sucessoSabedoria = distribuidorPontos.adicionarPontos("sabedoria", etSabedoria.text.toString().toIntOrNull() ?: 0)
 
-                // Criar o personagem com os pontos distribuídos
-                personagem = Personagem(nome, raca)
+                // Verifique se todos os pontos foram adicionados com sucesso
+                if (sucessoForca && sucessoDestreza && sucessoInteligencia && sucessoConstituicao && sucessoCarisma && sucessoSabedoria && distribuidorPontos.pontosRestantes() == 0) {
+                    personagem = Personagem(nome, raca)
+                    personagem.atualizarPontosDeVida()
 
-                // Atualiza os pontos de vida após a distribuição de pontos
-                personagem.atualizarPontosDeVida()
+                    // Iniciar a próxima atividade
+                    val intent = Intent(this, ConfirmacaoActivity::class.java).apply {
+                        putExtra("NOME_PERSONAGEM", personagem.nome)
+                        putExtra("ATRIBUTOS", personagem.exibirAtributos())
+                        putExtra("PONTOS_DE_VIDA", personagem.pontosDeVida)
+                    }
+                    startActivity(intent)
 
-                // Atualiza a UI com os atributos e pontos de vida
-                tvPontosVida.text = "Pontos de Vida: ${personagem.pontosDeVida}"
-                tvAtributos.text = "Atributos do Personagem:\n${personagem.exibirAtributos()}"
-                tvPontosRestantes.text = "Pontos Restantes: ${distribuidorPontos.pontosRestantes()}" // Atualizar pontos restantes
+                    // Exibir os atributos na UI
+                    tvAtributos.text = "Atributos do Personagem:\n${distribuidorPontos.exibirAtributos()}"
+                    tvPontosVida.text = "Pontos de Vida: ${personagem.pontosDeVida}"
+                } else {
+                    tvAtributos.text = "Distribua corretamente todos os pontos."
+                }
+
+                // Atualiza os pontos restantes na interface
+                tvPontosRestantes.text = "Pontos Restantes: ${distribuidorPontos.pontosRestantes()}"
             } catch (e: Exception) {
                 e.printStackTrace()
                 Toast.makeText(this, "Erro ao processar os pontos: ${e.message}", Toast.LENGTH_LONG).show()
@@ -111,6 +120,10 @@ class MainActivity : AppCompatActivity() {
             tvAtributos.text = "Por favor, preencha todos os campos."
         }
     }
+
+
+
+
 
 
 

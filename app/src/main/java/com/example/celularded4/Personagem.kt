@@ -1,17 +1,18 @@
 import ListaRaca.*
 import com.example.celularded4.ui.theme.MensagensErro
 
-
 class Personagem(
     var nome: String,
     raca: Raca
 ) {
-    var forca: Int = 8
-    var destreza: Int = 8
-    var inteligencia: Int = 8
-    var constituicao: Int = 8
-    var carisma: Int = 8
-    var sabedoria: Int = 8
+    // Atributos com 8 de base
+    var pontosDistribuidosForca: Int = 0
+    var pontosDistribuidosDestreza: Int = 0
+    var pontosDistribuidosInteligencia: Int = 0
+    var pontosDistribuidosConstituicao: Int = 0
+    var pontosDistribuidosCarisma: Int = 0
+    var pontosDistribuidosSabedoria: Int = 0
+
     var pontosDeVida: Int = 0
         private set
 
@@ -50,15 +51,15 @@ class Personagem(
 
             if (sucesso) {
                 when (atributo) {
-                    "forca" -> forca += pontos
-                    "destreza" -> destreza += pontos
-                    "inteligencia" -> inteligencia += pontos
+                    "forca" -> pontosDistribuidosForca += pontos
+                    "destreza" -> pontosDistribuidosDestreza += pontos
+                    "inteligencia" -> pontosDistribuidosInteligencia += pontos
                     "constituicao" -> {
-                        constituicao += pontos
+                        pontosDistribuidosConstituicao += pontos
                         atualizarPontosDeVida() // Atualiza os pontos de vida se a constituição mudar
                     }
-                    "carisma" -> carisma += pontos
-                    "sabedoria" -> sabedoria += pontos
+                    "carisma" -> pontosDistribuidosCarisma += pontos
+                    "sabedoria" -> pontosDistribuidosSabedoria += pontos
                 }
                 pontosRestantes -= pontos
             } else {
@@ -71,19 +72,26 @@ class Personagem(
     }
 
     fun atualizarPontosDeVida() {
-        val calculador = CalculadorPontosVida(constituicao)
+        val calculador = CalculadorPontosVida(constituicaoFinal())
         pontosDeVida = calculador.calcularPontosVida()
     }
 
-    internal fun exibirAtributos() {
-        println("Atributos de $nome:")
-        println("Raça: ${raca.nome}")
-        println("Força: $forca")
-        println("Destreza: $destreza")
-        println("Inteligência: $inteligencia")
-        println("Constituição: $constituicao")
-        println("Carisma: $carisma")
-        println("Sabedoria: $sabedoria")
-        println("Pontos de Vida: $pontosDeVida")
+    private fun forcaFinal(): Int = 8 + pontosDistribuidosForca
+    private fun destrezaFinal(): Int = 8 + pontosDistribuidosDestreza
+    private fun inteligenciaFinal(): Int = 8 + pontosDistribuidosInteligencia
+    private fun constituicaoFinal(): Int = 8 + pontosDistribuidosConstituicao
+    private fun carismaFinal(): Int = 8 + pontosDistribuidosCarisma
+    private fun sabedoriaFinal(): Int = 8 + pontosDistribuidosSabedoria
+
+    internal fun exibirAtributos(): String {
+        return "Atributos de $nome:\n" +
+                "Raça: ${raca.nome}\n" +
+                "Força: ${forcaFinal()}\n" +
+                "Destreza: ${destrezaFinal()}\n" +
+                "Inteligência: ${inteligenciaFinal()}\n" +
+                "Constituição: ${constituicaoFinal()}\n" +
+                "Carisma: ${carismaFinal()}\n" +
+                "Sabedoria: ${sabedoriaFinal()}\n" +
+                "Pontos de Vida: $pontosDeVida"
     }
 }

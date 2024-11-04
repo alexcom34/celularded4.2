@@ -3,45 +3,30 @@ class DistribuidorPontos {
     private val maxPoints = 15
     private val totalPoints = 27
 
-    var forca: Int = basePoints
-        private set
-    var destreza: Int = basePoints
-        private set
-    var inteligencia: Int = basePoints
-        private set
-    var constituicao: Int = basePoints
-        private set
-    var carisma: Int = basePoints
-        private set
-    var sabedoria: Int = basePoints
-        private set
-
     private var pontosDistribuidos = 0
 
-    fun adicionarPontos(atributo: String, pontos: Int): Boolean {
-        val novoValor = when (atributo.toLowerCase()) {
-            "forca" -> forca + pontos
-            "destreza" -> destreza + pontos
-            "inteligencia" -> inteligencia + pontos
-            "constituicao" -> constituicao + pontos
-            "carisma" -> carisma + pontos
-            "sabedoria" -> sabedoria + pontos
-            else -> return false
-        }
+    private val atributos = mutableMapOf(
+        "forca" to 0,
+        "destreza" to 0,
+        "inteligencia" to 0,
+        "constituicao" to 0,
+        "carisma" to 0,
+        "sabedoria" to 0
+    )
 
-        if (novoValor > maxPoints || pontosDistribuidos + pontos > totalPoints) {
+    fun adicionarPontos(atributo: String, pontos: Int): Boolean {
+        val atributoLower = atributo.toLowerCase()
+        if (!atributos.containsKey(atributoLower)) return false
+
+        val novoValor = atributos[atributoLower]!! + pontos
+
+        // Verifica se a soma não ultrapassa os limites
+        if ((novoValor + basePoints) > maxPoints || (pontosDistribuidos + pontos) > totalPoints) {
             return false
         }
 
-        when (atributo.toLowerCase()) {
-            "forca" -> forca += pontos
-            "destreza" -> destreza += pontos
-            "inteligencia" -> inteligencia += pontos
-            "constituicao" -> constituicao += pontos
-            "carisma" -> carisma += pontos
-            "sabedoria" -> sabedoria += pontos
-        }
-
+        // Adiciona os pontos ao atributo
+        atributos[atributoLower] = novoValor
         pontosDistribuidos += pontos
         return true
     }
@@ -51,12 +36,19 @@ class DistribuidorPontos {
     }
 
     fun resetarPontos() {
-        forca = basePoints
-        destreza = basePoints
-        inteligencia = basePoints
-        constituicao = basePoints
-        carisma = basePoints
-        sabedoria = basePoints
+        for (key in atributos.keys) {
+            atributos[key] = 0 // Zera os pontos adicionais
+        }
         pontosDistribuidos = 0
+    }
+
+    fun getAtributoTotal(atributo: String): Int {
+        // Retorna o valor total de um atributo (base + pontos adicionais)
+        return basePoints + (atributos[atributo.toLowerCase()] ?: 0)
+    }
+
+    fun exibirAtributos(): String {
+        // Exibe todos os atributos com base e pontos adicionais somados
+        return atributos.map { "${it.key.capitalize()}: ${getAtributoTotal(it.key)}" }.joinToString("\n")
     }
 }

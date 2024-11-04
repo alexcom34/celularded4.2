@@ -6,9 +6,9 @@ class Humano : Raca {
     override val nome = "Humano"
 
     override fun aplicarBonus(personagem: Personagem) {
-        personagem.forca += 1
-        personagem.destreza += 1
-        personagem.constituicao += 1
-        personagem.inteligencia += 1
+        personagem.pontosDistribuidosForca += 1
+        personagem.pontosDistribuidosDestreza += 1
+        personagem.pontosDistribuidosConstituicao += 1
+        personagem.pontosDistribuidosInteligencia += 1
     }
 }

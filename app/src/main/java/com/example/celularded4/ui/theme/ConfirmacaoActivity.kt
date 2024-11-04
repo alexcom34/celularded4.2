@@ -15,28 +15,26 @@ class ConfirmacaoActivity : AppCompatActivity() {
     private lateinit var tvDadosPersonagem: TextView
     private lateinit var btnCriarNovo: Button
     private lateinit var btnEncerrar: Button
-    private lateinit var btnSalvar: Button // Novo botão para salvar o personagem
-    private lateinit var databaseHelper: DatabaseHelper // Para interagir com o banco de dados
+    private lateinit var btnSalvar: Button
+    private lateinit var btnConsultar: Button
+    private lateinit var databaseHelper: DatabaseHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_confirmacao)
 
-        // Inicializando os componentes da interface
         tvDadosPersonagem = findViewById(R.id.tv_dados_personagem)
         btnCriarNovo = findViewById(R.id.btn_criar_novo)
         btnEncerrar = findViewById(R.id.btn_encerrar)
         btnSalvar = findViewById(R.id.btnSalvar)
+        btnConsultar = findViewById(R.id.btnConsultar)
 
-        // Inicializando o DatabaseHelper
         databaseHelper = DatabaseHelper(this)
 
-        // Recebendo os dados do personagem
         val nome = intent.getStringExtra("NOME_PERSONAGEM") ?: "Nome não disponível"
         val atributos = intent.getStringExtra("ATRIBUTOS") ?: "Atributos não disponíveis"
         val pontosVida = intent.getIntExtra("PONTOS_DE_VIDA", 0)
 
-        // Exibindo os dados do personagem
         tvDadosPersonagem.text = """
             Personagem Criado:
             Nome: $nome
@@ -44,47 +42,44 @@ class ConfirmacaoActivity : AppCompatActivity() {
             Pontos de Vida: $pontosVida
         """.trimIndent()
 
-        // Configurando o botão para criar novo personagem
         btnCriarNovo.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-            finish() // Encerra a ConfirmacaoActivity
+            finish()
         }
 
-        // Configurando o botão para encerrar o programa
         btnEncerrar.setOnClickListener {
-            finishAffinity() // Encerra todas as atividades do aplicativo
+            finishAffinity()
         }
 
-        // Configurando o botão para salvar o personagem
         btnSalvar.setOnClickListener {
             salvarPersonagem(nome, atributos, pontosVida)
+        }
+
+        btnConsultar.setOnClickListener {
+            consultarPersonagens()
         }
     }
 
     private fun salvarPersonagem(nome: String, atributos: String, pontosVida: Int) {
-        // Aqui você deve coletar os atributos individuais do personagem
-        // Vamos supor que os atributos sejam recebidos como uma String separada por vírgulas
-        val atributosArray = atributos.split(",").map { it.trim() }
+        val atributosArray = atributos.split("\n").map { it.split(": ")[1].toInt() }
 
-        if (atributosArray.size < 6) { // Verifique se todos os atributos foram passados
+        if (atributosArray.size < 6) {
             Toast.makeText(this, "Erro: Atributos incompletos", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Coletando os valores dos atributos
-        val forca = atributosArray[0].toInt()
-        val destreza = atributosArray[1].toInt()
-        val inteligencia = atributosArray[2].toInt()
-        val constituicao = atributosArray[3].toInt()
-        val carisma = atributosArray[4].toInt()
-        val sabedoria = atributosArray[5].toInt()
+        val forca = atributosArray[0]
+        val destreza = atributosArray[1]
+        val inteligencia = atributosArray[2]
+        val constituicao = atributosArray[3]
+        val carisma = atributosArray[4]
+        val sabedoria = atributosArray[5]
 
-        // Criação do objeto PersonagemData para inserir no banco de dados
         val personagemData = PersonagemData(
-            id = generateId(), // Implementar lógica para gerar um ID único
+            id = System.currentTimeMillis().toString(),
             nome = nome,
-            classe = "Classe do Personagem", // Você pode precisar passar a classe também
+            classe = "Classe do Personagem",
             forca = forca,
             destreza = destreza,
             inteligencia = inteligencia,
@@ -93,13 +88,24 @@ class ConfirmacaoActivity : AppCompatActivity() {
             sabedoria = sabedoria
         )
 
-        // Salvar personagemData no banco de dados
-        databaseHelper.addPersonagem(personagemData) // Usando addPersonagem em vez de insertPersonagem
+        databaseHelper.addPersonagem(personagemData)
         Toast.makeText(this, "Personagem salvo com sucesso!", Toast.LENGTH_SHORT).show()
     }
 
-    private fun generateId(): String {
-        // Lógica para gerar um ID único
-        return System.currentTimeMillis().toString() // Exemplo simples de ID baseado no tempo
+    private fun consultarPersonagens() {
+        val personagens = databaseHelper.getAllPersonagens()
+        val builder = StringBuilder()
+        for (personagem in personagens) {
+            builder.append("ID: ${personagem.id}\n")
+            builder.append("Nome: ${personagem.nome}\n")
+            builder.append("Classe: ${personagem.classe}\n")
+            builder.append("Força: ${personagem.forca}\n")
+            builder.append("Destreza: ${personagem.destreza}\n")
+            builder.append("Inteligência: ${personagem.inteligencia}\n")
+            builder.append("Constituição: ${personagem.constituicao}\n")
+            builder.append("Carisma: ${personagem.carisma}\n")
+            builder.append("Sabedoria: ${personagem.sabedoria}\n\n")
+        }
+        tvDadosPersonagem.text = builder.toString()
     }
 }

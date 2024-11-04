@@ -30,6 +30,13 @@
         android:id="@+id/btn_encerrar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Encerrar" />
+        android:text="Encerrar"
+        android:layout_marginBottom="16dp"/> <!-- Margem inferior para separação -->
+
+    <Button
+        android:id="@+id/btnConsultar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Consultar Personagens" />
 
 </LinearLayout>

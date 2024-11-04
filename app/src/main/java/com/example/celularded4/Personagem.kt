@@ -1,5 +1,4 @@
-import ListaRaca.*
-import com.example.celularded4.ui.theme.MensagensErro
+import ListaRaca.Raca
 
 class Personagem(
     var nome: String,
@@ -26,49 +25,41 @@ class Personagem(
         atualizarPontosDeVida()
     }
 
+    // Getters
+    fun getForca(): Int = forcaFinal()
+    fun getDestreza(): Int = destrezaFinal()
+    fun getInteligencia(): Int = inteligenciaFinal()
+    fun getConstituicao(): Int = constituicaoFinal()
+    fun getCarisma(): Int = carismaFinal()
+    fun getSabedoria(): Int = sabedoriaFinal()
+
+    // Setters
+    fun setForca(forca: Int) {
+        pontosDistribuidosForca = forca - 8
+    }
+
+    fun setDestreza(destreza: Int) {
+        pontosDistribuidosDestreza = destreza - 8
+    }
+
+    fun setInteligencia(inteligencia: Int) {
+        pontosDistribuidosInteligencia = inteligencia - 8
+    }
+
+    fun setConstituicao(constituicao: Int) {
+        pontosDistribuidosConstituicao = constituicao - 8
+    }
+
+    fun setCarisma(carisma: Int) {
+        pontosDistribuidosCarisma = carisma - 8
+    }
+
+    fun setSabedoria(sabedoria: Int) {
+        pontosDistribuidosSabedoria = sabedoria - 8
+    }
+
     fun distribuirPontos() {
-        var pontosRestantes = 27
-        val atributos = listOf("forca", "destreza", "inteligencia", "constituicao", "carisma", "sabedoria")
-
-        while (pontosRestantes > 0) {
-            exibirAtributos()
-            println("Pontos restantes: $pontosRestantes")
-            print("Escolha um atributo para aumentar (${atributos.joinToString(", ")}): ")
-            val atributo = readLine() ?: ""
-            if (atributo !in atributos) {
-                println(MensagensErro.ATRIBUTO_INVALIDO) // Mensagem de erro atualizada
-                continue
-            }
-            print("Quantos pontos deseja adicionar a $atributo? ")
-            val pontos = readLine()?.toIntOrNull() ?: 0
-
-            if (pontos <= 0 || pontos > pontosRestantes) {
-                println(MensagensErro.NUMERO_INVALIDO_DE_PONTOS) // Mensagem de erro atualizada
-                continue
-            }
-
-            val sucesso = distribuidorPontos.adicionarPontos(atributo, pontos)
-
-            if (sucesso) {
-                when (atributo) {
-                    "forca" -> pontosDistribuidosForca += pontos
-                    "destreza" -> pontosDistribuidosDestreza += pontos
-                    "inteligencia" -> pontosDistribuidosInteligencia += pontos
-                    "constituicao" -> {
-                        pontosDistribuidosConstituicao += pontos
-                        atualizarPontosDeVida() // Atualiza os pontos de vida se a constituição mudar
-                    }
-                    "carisma" -> pontosDistribuidosCarisma += pontos
-                    "sabedoria" -> pontosDistribuidosSabedoria += pontos
-                }
-                pontosRestantes -= pontos
-            } else {
-                println(MensagensErro.DISTRIBUICAO_INVALIDA) // Mensagem de erro atualizada
-            }
-        }
-
-        println("Distribuição de pontos concluída!")
-        exibirAtributos()
+        // (Seu código existente para distribuir pontos)
     }
 
     fun atualizarPontosDeVida() {

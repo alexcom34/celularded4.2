@@ -8,7 +8,6 @@ import ListaRaca.*
 import Personagem
 import android.content.Intent
 
-
 class MainActivity : AppCompatActivity() {
 
     private lateinit var etNomePersonagem: EditText
@@ -17,7 +16,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnConfirmar: Button
     private lateinit var btnResetar: Button
     private lateinit var tvAtributos: TextView
-    private lateinit var tvPontosRestantes: TextView // Exibe os pontos restantes
+    private lateinit var tvPontosRestantes: TextView
     private lateinit var etForca: EditText
     private lateinit var etDestreza: EditText
     private lateinit var etInteligencia: EditText
@@ -36,9 +35,9 @@ class MainActivity : AppCompatActivity() {
         spinnerRaca = findViewById(R.id.spinner_raca)
         tvPontosVida = findViewById(R.id.tv_pontos_vida)
         btnConfirmar = findViewById(R.id.btn_confirmar)
-        btnResetar = findViewById(R.id.btn_resetar) // Botão para resetar pontos
+        btnResetar = findViewById(R.id.btn_resetar)
         tvAtributos = findViewById(R.id.tv_atributos)
-        tvPontosRestantes = findViewById(R.id.tv_pontos_restantes) // Pontos restantes
+        tvPontosRestantes = findViewById(R.id.tv_pontos_restantes)
 
         etForca = findViewById(R.id.et_forca)
         etDestreza = findViewById(R.id.et_destreza)
@@ -47,14 +46,11 @@ class MainActivity : AppCompatActivity() {
         etCarisma = findViewById(R.id.et_carisma)
         etSabedoria = findViewById(R.id.et_sabedoria)
 
-        // Inicializando o distribuidor de pontos e exibindo os pontos restantes
         distribuidorPontos = DistribuidorPontos()
         tvPontosRestantes.text = "Pontos Restantes: ${distribuidorPontos.pontosRestantes()}"
 
-        // Configurando o Spinner com as raças
         setupRacasSpinner()
 
-        // Configurando botões de ação
         btnConfirmar.setOnClickListener { onConfirmarClicked() }
         btnResetar.setOnClickListener { onResetarClicked() }
     }
@@ -80,22 +76,33 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (raca != null && nome.isNotBlank()) {
-            distribuidorPontos.resetarPontos()  // Garantir que o distribuidor está resetado
+            distribuidorPontos.resetarPontos()
             try {
                 // Adicionando pontos com o distribuidor a partir dos valores digitados
-                val sucessoForca = distribuidorPontos.adicionarPontos("forca", etForca.text.toString().toIntOrNull() ?: 0)
-                val sucessoDestreza = distribuidorPontos.adicionarPontos("destreza", etDestreza.text.toString().toIntOrNull() ?: 0)
-                val sucessoInteligencia = distribuidorPontos.adicionarPontos("inteligencia", etInteligencia.text.toString().toIntOrNull() ?: 0)
-                val sucessoConstituicao = distribuidorPontos.adicionarPontos("constituicao", etConstituicao.text.toString().toIntOrNull() ?: 0)
-                val sucessoCarisma = distribuidorPontos.adicionarPontos("carisma", etCarisma.text.toString().toIntOrNull() ?: 0)
-                val sucessoSabedoria = distribuidorPontos.adicionarPontos("sabedoria", etSabedoria.text.toString().toIntOrNull() ?: 0)
+                val forca = etForca.text.toString().toIntOrNull() ?: 0
+                val destreza = etDestreza.text.toString().toIntOrNull() ?: 0
+                val inteligencia = etInteligencia.text.toString().toIntOrNull() ?: 0
+                val constituicao = etConstituicao.text.toString().toIntOrNull() ?: 0
+                val carisma = etCarisma.text.toString().toIntOrNull() ?: 0
+                val sabedoria = etSabedoria.text.toString().toIntOrNull() ?: 0
 
-                // Verifique se todos os pontos foram adicionados com sucesso
+                val sucessoForca = distribuidorPontos.adicionarPontos("forca", forca)
+                val sucessoDestreza = distribuidorPontos.adicionarPontos("destreza", destreza)
+                val sucessoInteligencia = distribuidorPontos.adicionarPontos("inteligencia", inteligencia)
+                val sucessoConstituicao = distribuidorPontos.adicionarPontos("constituicao", constituicao)
+                val sucessoCarisma = distribuidorPontos.adicionarPontos("carisma", carisma)
+                val sucessoSabedoria = distribuidorPontos.adicionarPontos("sabedoria", sabedoria)
+
                 if (sucessoForca && sucessoDestreza && sucessoInteligencia && sucessoConstituicao && sucessoCarisma && sucessoSabedoria && distribuidorPontos.pontosRestantes() == 0) {
                     personagem = Personagem(nome, raca)
+                    personagem.setForca(forca)
+                    personagem.setDestreza(destreza)
+                    personagem.setInteligencia(inteligencia)
+                    personagem.setConstituicao(constituicao)
+                    personagem.setCarisma(carisma)
+                    personagem.setSabedoria(sabedoria)
                     personagem.atualizarPontosDeVida()
 
-                    // Iniciar a próxima atividade
                     val intent = Intent(this, ConfirmacaoActivity::class.java).apply {
                         putExtra("NOME_PERSONAGEM", personagem.nome)
                         putExtra("ATRIBUTOS", personagem.exibirAtributos())
@@ -103,14 +110,12 @@ class MainActivity : AppCompatActivity() {
                     }
                     startActivity(intent)
 
-                    // Exibir os atributos na UI
-                    tvAtributos.text = "Atributos do Personagem:\n${distribuidorPontos.exibirAtributos()}"
+                    tvAtributos.text = "Atributos do Personagem:\n${personagem.exibirAtributos()}"
                     tvPontosVida.text = "Pontos de Vida: ${personagem.pontosDeVida}"
                 } else {
                     tvAtributos.text = "Distribua corretamente todos os pontos."
                 }
 
-                // Atualiza os pontos restantes na interface
                 tvPontosRestantes.text = "Pontos Restantes: ${distribuidorPontos.pontosRestantes()}"
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -121,18 +126,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-
-
-
-
-
-
     private fun onResetarClicked() {
         distribuidorPontos.resetarPontos()
         tvPontosRestantes.text = "Pontos Restantes: ${distribuidorPontos.pontosRestantes()}"
 
-        // Reseta os campos dos atributos na UI
         etForca.setText("")
         etDestreza.setText("")
         etInteligencia.setText("")
@@ -140,7 +137,6 @@ class MainActivity : AppCompatActivity() {
         etCarisma.setText("")
         etSabedoria.setText("")
 
-        // Feedback visual para o reset
         tvAtributos.text = "Distribuição de pontos redefinida."
     }
 }
